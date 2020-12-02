@@ -9,6 +9,7 @@ export solve1
 
 function solve1(x)
 end
+
 function solve2(x)
 end
 
