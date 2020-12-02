@@ -1,0 +1,16 @@
+name = "AdventOfCode2020"
+uuid = "f4ed9f9a-94fb-4104-b912-b747b7041438"
+authors = ["brucala <brucala@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Formatting = "59287772-0a20-5a39-b81b-1366585eb4c0"
+
+[extras]
+Markdown = "d6f4376e-aef5-505a-96c1-9c027394607a"
+SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test", "SafeTestsets", "Markdown"]
+
