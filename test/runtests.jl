@@ -5,7 +5,7 @@ using AdventOfCode2020: solved_days
 @testset "AdventOfCode2020" begin
     @safetestset "Day 1" begin include("test_day1.jl") end
     @safetestset "Day 2" begin include("test_day2.jl") end
-    #@safetestset "Day 3" begin include("test_day3.jl") end
+    @safetestset "Day 3" begin include("test_day3.jl") end
     #@safetestset "Day 4" begin include("test_day4.jl") end
     #@safetestset "Day 5" begin include("test_day5.jl") end
     #@safetestset "Day 6" begin include("test_day6.jl") end
