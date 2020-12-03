@@ -45,16 +45,23 @@ solutions(day, data)
 """
 )
 
-function generate_files(nday)
-    day_file = open("src/day$nday.jl", "w")
-    printfmt(day_file, day_template, nday)
-    close(day_file)
-    println("file $(day_file.name) generated")
+function write_file(filename, template, nday)
+    if isfile(filename)
+        println("file $filename exists, skipping generation...")
+        return
+    end
+    file = open(filename, "w")
+    printfmt(file, template, nday)
+    close(file)
+    println("file $filename generated")
+end
 
-    test_file = open("test/test_day$nday.jl", "w")
-    printfmt(test_file, test_template, nday)
-    close(test_file)
-    println("file $(test_file.name) generated")
+function generate_files(nday)
+    day_filename = "src/day$nday.jl"
+    write_file(day_filename, day_template, nday)
+
+    test_filename = "test/test_day$nday.jl"
+    write_file(test_filename, test_template, nday)
 end
 
 function parse_commandline()
