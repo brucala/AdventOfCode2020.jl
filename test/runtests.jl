@@ -32,8 +32,15 @@ end
 
 include("utils.jl")
 
+benchmarks = NamedTuple[]
 for nday in solved_days
     day = getproperty(AdventOfCode2020, Symbol("Day$nday"))
     data = read_input(nday)
     solutions(day, data)
+    append!(benchmarks, benchmark(day, data))
+end
+
+# TODO: do something smarter with benchmarks
+for bench in benchmarks
+    println(bench)
 end

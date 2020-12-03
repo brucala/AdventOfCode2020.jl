@@ -9,8 +9,9 @@ Formatting = "59287772-0a20-5a39-b81b-1366585eb4c0"
 
 [extras]
 Markdown = "d6f4376e-aef5-505a-96c1-9c027394607a"
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "SafeTestsets", "Markdown"]
+test = ["Test", "SafeTestsets", "Markdown", "BenchmarkTools"]
