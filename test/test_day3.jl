@@ -1,10 +1,8 @@
 using Test
-using AdventOfCode2020
-include("utils.jl")
+using AdventOfCode2020.Day3
+using AdventOfCode2020: read_input
 
 nday = 3
-
-day = getproperty(AdventOfCode2020, Symbol("Day$nday"))
 
 data = read_input(nday)
 
@@ -23,12 +21,12 @@ test =
 .#..#...#.#
 """
 
-@testset "Day$nday" begin
-    @test day.solve1(test) == 7
-    @test day.solve2(test) == 336
+@testset "Day$nday tests" begin
+    @test solve1(test) == 7
+    @test solve2(test) == 336
 end
 
-solutions(day, data)
-
-#@time solve1(data)
-#@time solve2(data)
+@testset "Day$nday solutions" begin
+    @test solve1(data) == 151
+    @test solve2(data) == 7540141059
+end

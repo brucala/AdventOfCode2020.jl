@@ -20,12 +20,10 @@ end  # module
 const test_template = FormatExpr(
 """
 using Test
-using AdventOfCode2020
-include("utils.jl")
+using AdventOfCode2020.Day{1}
+using AdventOfCode2020: read_input
 
-nday = {}
-
-day = getproperty(AdventOfCode2020, Symbol("Day\$nday"))
+nday = {1}
 
 data = read_input(nday)
 
@@ -33,15 +31,15 @@ test =
 \"\"\"
 \"\"\"
 
-@testset "Day\$nday" begin
-    @test day.solve1(test) == ?
-    #@test day.solve2(test) == ?
+@testset "Day\$nday tests" begin
+    @test solve1(test) == ?
+    #@test solve2(test) == ?
 end
 
-solutions(day, data)
-
-#@time solve1(data)
-#@time solve2(data)
+@testset "Day\$nday solutions" begin
+    @test solve1(data) == ?
+    #@test solve2(data) == ?
+end
 """
 )
 

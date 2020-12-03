@@ -1,6 +1,6 @@
 using Test
 using SafeTestsets
-using AdventOfCode2020: solved_days
+using AdventOfCode2020
 
 @testset "AdventOfCode2020" begin
     @safetestset "Day 1" begin include("test_day1.jl") end
@@ -28,4 +28,12 @@ using AdventOfCode2020: solved_days
     #@safetestset "Day 23" begin include("test_day23.jl") end
     #@safetestset "Day 24" begin include("test_day24.jl") end
     #@safetestset "Day 25" begin include("test_day25.jl") end
+end
+
+include("utils.jl")
+
+for nday in solved_days
+    day = getproperty(AdventOfCode2020, Symbol("Day$nday"))
+    data = read_input(nday)
+    solutions(day, data)
 end

@@ -10,7 +10,7 @@ function solve1(x)
     for a = x[1:n-1]
         for b = x[2:n]
             if a + b == 2020
-                println("$a x $b = $(a*b)")
+                #println("$a x $b = $(a*b)")
                 return a * b
             end
         end
@@ -28,7 +28,7 @@ function solve2(x)
             end
             for c = x[3:n]
                 if a + b +c == 2020
-                    println("$a x $b x $c = $(a*b*c)")
+                    #println("$a x $b x $c = $(a*b*c)")
                     return a * b * c
                 end
             end
