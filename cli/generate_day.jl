@@ -76,8 +76,8 @@ end
 
 function main()
     parsed_args = parse_commandline()
-
     nday = parsed_args["nday"]
+
     generate_files(nday)
 end
 
