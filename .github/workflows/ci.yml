@@ -32,5 +32,5 @@ jobs:
         with:
           version: ${{ matrix.julia-version }}
       - uses: julia-actions/julia-buildpkg@latest
-      - run: julia --color=yes cli/benchmark.jl
+      - run: julia --color=yes --project cli/benchmark.jl
         shell: bash
