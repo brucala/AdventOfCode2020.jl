@@ -29,23 +29,3 @@ using AdventOfCode2020
     #@safetestset "Day 24" begin include("test_day24.jl") end
     #@safetestset "Day 25" begin include("test_day25.jl") end
 end
-
-include("utils.jl")
-
-do_solutions = false
-do_benchmards = false
-
-benchmarks = NamedTuple[]
-for nday in solved_days
-    day = getproperty(AdventOfCode2020, Symbol("Day$nday"))
-    data = read_input(nday)
-    do_solutions && solutions(day, data)
-    do_benchmards && append!(benchmarks, benchmark(day, data))
-end
-
-# TODO: do something smarter with benchmarks
-if do_benchmards
-    for bench in benchmarks
-        println(bench)
-    end
-end

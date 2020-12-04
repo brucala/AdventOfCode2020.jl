@@ -1,4 +1,4 @@
-using Markdown
+using AdventOfCode2020
 using BenchmarkTools
 
 function available_solvers(day_module::Module)
@@ -24,21 +24,18 @@ function benchmark(day_module::Module, data)
     return benchmarks
 end
 
-function solutions(sols, data)
-    for (i,sol) in enumerate(sols)
-        println()
-        show(stdout, MIME("text/plain"), md"## Solution $i")
-        println()
-        @time y = sol(data)
-        show(stdout, MIME("text/plain"), md"**solution**: $y")
-        println()
+function main()
+    benchmarks = NamedTuple[]
+    for nday in solved_days
+        day = getproperty(AdventOfCode2020, Symbol("Day$nday"))
+        data = read_input(nday)
+        append!(benchmarks, benchmark(day, data))
+    end
+
+    # TODO: do something smarter with benchmarks
+    for bench in benchmarks
+        println(bench)
     end
 end
 
-function solutions(day_module::Module, data)
-    sols = available_solvers(day_module)
-    println()
-    show(stdout, MIME("text/plain"), md"# Solutions for $day_module:")
-    println()
-    solutions(sols, data)
-end
+main()
