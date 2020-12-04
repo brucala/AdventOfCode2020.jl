@@ -4,7 +4,6 @@ Solutions to [Advent of Code 2020 edition](https://adventofcode.com/2020) in Jul
 
 ## Benchmarks
 
-<!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
 <style>
