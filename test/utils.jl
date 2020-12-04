@@ -16,7 +16,9 @@ function benchmark(day_module::Module, data)
     benchmarks = NamedTuple[]
     for sol in sols
         d, p = getday(day_module), getpart(sol)
-        b = @benchmark $sol($data)
+        b = @benchmark $sol($data) seconds=0.5 samples=1000
+        nsamples = length(b.times)
+        nsamples <= 200 && @warn "low number of samples ($nsamples) run for benchmarking $d $p"
         push!(benchmarks, (day=d, part=p, benchmark=b))
     end
     return benchmarks

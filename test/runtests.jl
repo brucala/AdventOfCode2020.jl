@@ -33,7 +33,7 @@ end
 include("utils.jl")
 
 do_solutions = false
-do_benchmards = false
+do_benchmards = true
 
 benchmarks = NamedTuple[]
 for nday in solved_days
