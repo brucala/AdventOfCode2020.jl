@@ -1,6 +1,6 @@
 using AdventOfCode2020
 using BenchmarkTools
-using PrettyTables, DataFrames
+using PrettyTables
 
 function available_solvers(day_module::Module)
     solve_methods = [:solve1, :solve2]
@@ -44,7 +44,9 @@ function main()
 
     # TODO: do something nicer
     # e.g. show benchmark params, nsamples, ...
-    pretty_table(DataFrame(benchmarks), highlighters=(h_slow, h_fast))
+    headers = [:day, :part, :benchmark]
+    matrix = [collect(b)[i] for b in benchmarks, i in 1:3]
+    pretty_table(matrix, headers, highlighters=(h_slow, h_fast))
 end
 
 main()
