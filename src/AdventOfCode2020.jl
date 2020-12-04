@@ -2,7 +2,7 @@ module AdventOfCode2020
 
 export solved_days, read_input
 
-solved_days = 1:3
+solved_days = 1:4
 
 for day = solved_days
     include("day$day.jl")

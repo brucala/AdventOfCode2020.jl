@@ -6,7 +6,7 @@ using AdventOfCode2020
     @safetestset "Day 1" begin include("test_day1.jl") end
     @safetestset "Day 2" begin include("test_day2.jl") end
     @safetestset "Day 3" begin include("test_day3.jl") end
-    #@safetestset "Day 4" begin include("test_day4.jl") end
+    @safetestset "Day 4" begin include("test_day4.jl") end
     #@safetestset "Day 5" begin include("test_day5.jl") end
     #@safetestset "Day 6" begin include("test_day6.jl") end
     #@safetestset "Day 7" begin include("test_day7.jl") end
@@ -32,15 +32,20 @@ end
 
 include("utils.jl")
 
+do_solutions = false
+do_benchmards = false
+
 benchmarks = NamedTuple[]
 for nday in solved_days
     day = getproperty(AdventOfCode2020, Symbol("Day$nday"))
     data = read_input(nday)
-    solutions(day, data)
-    append!(benchmarks, benchmark(day, data))
+    do_solutions && solutions(day, data)
+    do_benchmards && append!(benchmarks, benchmark(day, data))
 end
 
 # TODO: do something smarter with benchmarks
-for bench in benchmarks
-    println(bench)
+if do_benchmards
+    for bench in benchmarks
+        println(bench)
+    end
 end
