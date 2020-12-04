@@ -1,5 +1,6 @@
 using AdventOfCode2020
 using BenchmarkTools
+using PrettyTables, DataFrames
 
 function available_solvers(day_module::Module)
     solve_methods = [:solve1, :solve2]
@@ -9,7 +10,7 @@ function available_solvers(day_module::Module)
 end
 
 getpart(sol::Function) = "part$(string(sol)[end])"
-getday(day_module::Module) = split(string(day_module), '.')[end]
+getday(day_module::Module) = split(string(day_module), '.')[end] |> String
 
 function benchmark(day_module::Module, data)
     sols = available_solvers(day_module)
@@ -32,10 +33,18 @@ function main()
         append!(benchmarks, benchmark(day, data))
     end
 
-    # TODO: do something smarter with benchmarks
-    for bench in benchmarks
-        println(bench)
-    end
+    h_slow = h1 = Highlighter(
+        (data,i,j)->j==3 && time(data[i,j]) > 1e6,
+        bold = true, foreground = :red
+    )
+    h_fast = h1 = Highlighter(
+        (data,i,j)->j==3 && time(data[i,j]) < 1e5,
+        bold = true, foreground = :green
+    )
+
+    # TODO: do something nicer
+    # e.g. show benchmark params, nsamples, ...
+    pretty_table(DataFrame(benchmarks), highlighters=(h_slow, h_fast))
 end
 
 main()
