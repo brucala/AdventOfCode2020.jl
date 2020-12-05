@@ -45,35 +45,40 @@ function benchmark()
         data = read_input(nday)
         append!(benchmarks, benchmark(day, data))
     end
+    return benchmarks
+end
 
+function benchmark_table(benchmarks, html_format=false)
     # TODO: do something nicer
     # e.g. show benchmark params, nsamples, ...
-    h_slow = Highlighter(
-        (data,i,j)->j==3 && time(data[i,j]) > 1e6,
-        bold = true, foreground = :red
-    )
-    h_fast = Highlighter(
-        (data,i,j)->j==3 && time(data[i,j]) < 1e5,
-        bold = true, foreground = :green
-    )
     headers = [:day, :part, :benchmark]
     matrix = [collect(b)[i] for b in benchmarks, i in 1:3]
-    pretty_table(matrix, headers, highlighters=(h_slow, h_fast))
+    h_slow, h_fast = highlighters(html_format)
+    backend = html_format ? :html : :text
 
-    h_slow = HTMLHighlighter(
-        (data,i,j)->j==3 && time(data[i,j]) > 1e6,
-        HTMLDecoration(color = "red", font_weight = "bold")
-    )
-    h_fast = HTMLHighlighter(
-        (data,i,j)->j==3 && time(data[i,j]) < 1e5,
-        HTMLDecoration(color = "green", font_weight = "bold")
-    )
+    # print in screen in text format
+    pretty_table(matrix, headers, highlighters=highlighters(false))
 
-    pretty_table(String, matrix, headers, highlighters=(h_slow, h_fast), backend=:html)
+    return pretty_table(String, matrix, headers, highlighters=(h_slow, h_fast), backend=backend)
+end
+
+function highlighters(html_format=false, slow=1e6, fast=1e5)
+    slow_f = (data,i,j)->j==3 && time(data[i,j]) > slow
+    fast_f = (data,i,j)->j==3 && time(data[i,j]) < fast
+
+    if html_format
+        h_slow = HTMLHighlighter(slow_f, HTMLDecoration(color = "red", font_weight = "bold"))
+        h_fast = HTMLHighlighter(fast_f, HTMLDecoration(color = "green", font_weight = "bold"))
+        return h_slow, h_fast
+    end
+    h_slow = Highlighter(slow_f, bold = true, foreground = :red)
+    h_fast = Highlighter(fast_f, bold = true, foreground = :green)
+    return h_slow, h_fast
 end
 
 function generate_readme(benchmarks)
-    file = open("README.md", "w")
+    filename = "README.md"
+    file = open(filename, "w")
     printfmt(file, readme_template, benchmarks)
     close(file)
     println("file $filename generated")
@@ -83,9 +88,14 @@ function parse_commandline()
     s = ArgParseSettings()
 
     @add_arg_table! s begin
-        "--generate-readme"
+        "--generate-readme", "-g"
             help = "use to generate README with benchmarking results"
             action = :store_true
+        "--format", "-f"
+            help = "table format for generated README (available: text/html)"
+            arg_type = String
+            range_tester = x -> x ∈ ("text", "html")
+            default = "text"
     end
 
     return parse_args(s)
@@ -94,9 +104,11 @@ end
 function main()
     parsed_args = parse_commandline()
     generate_flag = parsed_args["generate-readme"]
+    html_format = parsed_args["format"] == "html"
 
     benchmarks = benchmark()
-    generate_flag && generate_readme(benchmarks)
+    table = benchmark_table(benchmarks, html_format)
+    generate_flag && generate_readme(table)
 end
 
 main()

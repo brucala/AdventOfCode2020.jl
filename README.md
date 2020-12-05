@@ -4,95 +4,18 @@ Solutions to [Advent of Code 2020 edition](https://adventofcode.com/2020) in Jul
 
 ## Benchmarks
 
-<html>
-<meta charset="UTF-8">
-<style>
-  table, td, th {
-      border-collapse: collapse;
-      font-family: sans-serif;
-  }
-
-  td, th {
-      border-bottom: 0;
-      padding: 4px
-  }
-
-  tr:nth-child(odd) {
-      background: #eee;
-  }
-
-  tr:nth-child(even) {
-      background: #fff;
-  }
-
-  tr.header {
-      background: navy !important;
-      color: white;
-      font-weight: bold;
-  }
-
-  tr.subheader {
-      background: lightgray !important;
-      color: black;
-  }
-
-  tr.headerLastRow {
-      border-bottom: 2px solid black;
-  }
-
-  th.rowNumber, td.rowNumber {
-      text-align: right;
-  }
-
-</style>
-<body>
-<table>
-  <tr class = "header headerLastRow">
-    <th style = "text-align: right; ">day</th>
-    <th style = "text-align: right; ">part</th>
-    <th style = "text-align: right; ">benchmark</th>
-  </tr>
-  <tr>
-    <td style = "text-align: right; ">Day1</td>
-    <td style = "text-align: right; ">part1</td>
-    <td style = "color: green; font-weight: bold; text-align: right; ">Trial(33.922 μs)</td>
-  </tr>
-  <tr>
-    <td style = "text-align: right; ">Day1</td>
-    <td style = "text-align: right; ">part2</td>
-    <td style = "text-align: right; ">Trial(165.170 μs)</td>
-  </tr>
-  <tr>
-    <td style = "text-align: right; ">Day2</td>
-    <td style = "text-align: right; ">part1</td>
-    <td style = "color: red; font-weight: bold; text-align: right; ">Trial(1.272 ms)</td>
-  </tr>
-  <tr>
-    <td style = "text-align: right; ">Day2</td>
-    <td style = "text-align: right; ">part2</td>
-    <td style = "color: red; font-weight: bold; text-align: right; ">Trial(1.024 ms)</td>
-  </tr>
-  <tr>
-    <td style = "text-align: right; ">Day3</td>
-    <td style = "text-align: right; ">part1</td>
-    <td style = "color: green; font-weight: bold; text-align: right; ">Trial(51.712 μs)</td>
-  </tr>
-  <tr>
-    <td style = "text-align: right; ">Day3</td>
-    <td style = "text-align: right; ">part2</td>
-    <td style = "text-align: right; ">Trial(117.770 μs)</td>
-  </tr>
-  <tr>
-    <td style = "text-align: right; ">Day4</td>
-    <td style = "text-align: right; ">part1</td>
-    <td style = "color: red; font-weight: bold; text-align: right; ">Trial(1.510 ms)</td>
-  </tr>
-  <tr>
-    <td style = "text-align: right; ">Day4</td>
-    <td style = "text-align: right; ">part2</td>
-    <td style = "color: red; font-weight: bold; text-align: right; ">Trial(3.029 ms)</td>
-  </tr>
-</table>
-</body>
-</html>
+┌──────┬───────┬───────────────────┐
+│  day │  part │         benchmark │
+├──────┼───────┼───────────────────┤
+│ Day1 │ part1 │  Trial(37.884 μs) │
+│ Day1 │ part2 │ Trial(168.028 μs) │
+│ Day2 │ part1 │   Trial(1.269 ms) │
+│ Day2 │ part2 │   Trial(1.021 ms) │
+│ Day3 │ part1 │  Trial(51.799 μs) │
+│ Day3 │ part2 │ Trial(107.477 μs) │
+│ Day4 │ part1 │   Trial(1.389 ms) │
+│ Day4 │ part2 │   Trial(2.765 ms) │
+│ Day5 │ part1 │   Trial(1.414 ms) │
+│ Day5 │ part2 │   Trial(1.468 ms) │
+└──────┴───────┴───────────────────┘
 
