@@ -7,6 +7,8 @@ module Day{}
 export solve1, export solve2
 
 function solve1(x)
+    for line = readlines(IOBuffer(x))
+    end
 end
 
 function solve2(x)
