@@ -76,10 +76,13 @@ function highlighters(html_format=false, slow=1e6, fast=1e5)
     return h_slow, h_fast
 end
 
-function generate_readme(benchmarks)
+function generate_readme(table, html_format=false)
     filename = "README.md"
     file = open(filename, "w")
-    printfmt(file, readme_template, benchmarks)
+    if !html_format
+        table = "```\n$table\n```"
+    end
+    printfmt(file, readme_template, table)
     close(file)
     println("file $filename generated")
 end
