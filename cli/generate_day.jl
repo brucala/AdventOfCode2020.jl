@@ -4,7 +4,7 @@ const day_template = FormatExpr(
 """
 module Day{}
 
-export solve1, export solve2
+export solve1, solve2
 
 function solve1(x)
     for line = readlines(IOBuffer(x))
