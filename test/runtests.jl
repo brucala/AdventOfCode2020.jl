@@ -8,7 +8,7 @@ using AdventOfCode2020
     @safetestset "Day 3" begin include("test_day3.jl") end
     @safetestset "Day 4" begin include("test_day4.jl") end
     @safetestset "Day 5" begin include("test_day5.jl") end
-    #@safetestset "Day 6" begin include("test_day6.jl") end
+    @safetestset "Day 6" begin include("test_day6.jl") end
     #@safetestset "Day 7" begin include("test_day7.jl") end
     #@safetestset "Day 8" begin include("test_day8.jl") end
     #@safetestset "Day 9" begin include("test_day9.jl") end
