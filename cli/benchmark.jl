@@ -32,7 +32,14 @@ const readme_template = FormatExpr(
 
 Solutions to [Advent of Code 2020 edition](https://adventofcode.com/2020) in Julia.
 
+> Disclaimer: these solutions are created just as a way to practice and become more familiar
+with the awesome Julia language. They are not optimized for efficiency or for code beauty.
+
 ## Benchmarks
+
+To run the benchmarks:
+
+    \$ julia cli/benchmark.jl
 
 {}
 """
