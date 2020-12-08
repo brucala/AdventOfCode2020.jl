@@ -14,7 +14,7 @@ Base.@kwdef mutable struct Game
     instructions::Vector{Instruction}
     i::Int = 1
     accumulator::Int = 0
-    seen::Vector{Int} = Int[]
+    seen::Set{Int} = Set{Int}()
 end
 function Game(program::AbstractString)
     instructions = Instruction[]
@@ -23,6 +23,7 @@ function Game(program::AbstractString)
     end
     Game(;instructions=instructions)
 end
+increase!(g::Game; Δi=1, Δacc=0) = g.i, g.accumulator = g.i+Δi, g.accumulator+Δacc
 
 nins(g::Game) = length(g.instructions)
 instruction(g::Game) = g.instructions[g.i]
@@ -30,25 +31,23 @@ instruction(g::Game) = g.instructions[g.i]
 already_seen(g::Game) = g.i in g.seen
 finished(g::Game) = g.i == nins(g) + 1
 
-function check_state(g::Game)
+function state(g::Game)
     already_seen(g) && return :infinite_loop
     finished(g) && return :terminated
     1<= g.i <= nins(g) && return :running
     return :error
 end
 
+acc!(g::Game, arg::Int) = increase!(g; Δacc=arg)
+nop!(g::Game, arg::Int) = increase!(g)
+jmp!(g::Game, arg::Int) = increase!(g; Δi=arg)
+const f_ins! = Dict(:acc=>acc!, :nop=>nop!, :jmp=>jmp!)
+
 function run_instruction!(g::Game)
     push!(g.seen, g.i)
     ins = instruction(g)
-    @eval $(ins.operation)($g, $ins.argument)
+    f_ins![ins.operation](g, ins.argument)
 end
-
-function acc(g::Game, arg)
-    g.accumulator += arg
-    g.i += 1
-end
-nop(g::Game, arg) = g.i += 1
-jmp(g::Game, arg) = g.i += arg
 
 function solve1(x)
     game = Game(x)
@@ -76,10 +75,10 @@ end
 function solve2(x)
     games = change_games(Game(x))
     for (i, game) in enumerate(games)
-        while check_state(game) == :running
+        while state(game) == :running
             run_instruction!(game)
         end
-        check_state(game) == :terminated && return game.accumulator
+        state(game) == :terminated && return game.accumulator
     end
     return "no terminated games"
 end
