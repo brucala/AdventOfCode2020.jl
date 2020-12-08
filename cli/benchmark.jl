@@ -3,29 +3,6 @@ using BenchmarkTools
 using PrettyTables
 using ArgParse, Formatting
 
-function available_solvers(day_module::Module)
-    solve_methods = [:solve1, :solve2]
-    sols = [getfield(day_module, sol) for sol in solve_methods if sol in names(day_module)]
-    isempty(sols) && error("No solve method found in module $day_module")
-    return sols
-end
-
-getpart(sol::Function) = "part$(string(sol)[end])"
-getday(day_module::Module) = split(string(day_module), '.')[end] |> String
-
-function benchmark(day_module::Module, data)
-    sols = available_solvers(day_module)
-    benchmarks = NamedTuple[]
-    for sol in sols
-        d, p = getday(day_module), getpart(sol)
-        b = @benchmark $sol($data) seconds=0.5 samples=1000
-        nsamples = length(b.times)
-        nsamples <= 200 && @warn "low number of samples ($nsamples) run for benchmarking $d $p"
-        push!(benchmarks, (day=d, part=p, benchmark=b))
-    end
-    return benchmarks
-end
-
 const readme_template = FormatExpr(
 """
 # Advent of Code 2020
@@ -45,8 +22,45 @@ To run the benchmarks:
 """
 )
 
+function available_solvers(day_module::Module)
+    solve_methods = [:solve1, :solve2]
+    sols = [getfield(day_module, sol) for sol in solve_methods if sol in names(day_module)]
+    isempty(sols) && error("No solve method found in module $day_module")
+    return sols
+end
+
+getpart(sol::Function) = "part$(string(sol)[end])"
+getday(day_module::Module) = split(string(day_module), '.')[end] |> String
+
+getN(s::String) = parse(Int, match(r"\d+$", s).match)
+
+struct AOCBenchmark
+    day::Int
+    part::Int
+    benchmark::BenchmarkTools.Trial
+end
+AOCBenchmark(d::String, p::String, b::BenchmarkTools.Trial) = AOCBenchmark(getN(d), getN(p), b)
+
+day(b::AOCBenchmark) = b.day
+part(b::AOCBenchmark) = b.part
+btime(b::AOCBenchmark) = time(b.benchmark)
+bmemory(b::AOCBenchmark) = memory(b.benchmark)
+
+function benchmark(day_module::Module, data)
+    sols = available_solvers(day_module)
+    benchmarks = AOCBenchmark[]
+    for sol in sols
+        d, p = getday(day_module), getpart(sol)
+        b = @benchmark $sol($data) seconds=0.5 samples=1000
+        nsamples = length(b.times)
+        nsamples <= 100 && @warn "low number of samples ($nsamples) run for benchmarking $d $p"
+        push!(benchmarks, AOCBenchmark(d, p, b))
+    end
+    return benchmarks
+end
+
 function benchmark()
-    benchmarks = NamedTuple[]
+    benchmarks = AOCBenchmark[]
     for nday in solved_days
         day = getproperty(AdventOfCode2020, Symbol("Day$nday"))
         data = read_input(nday)
@@ -58,29 +72,39 @@ end
 function benchmark_table(benchmarks, html_format=false)
     # TODO: do something nicer
     # e.g. show benchmark params, nsamples, ...
-    headers = [:day, :part, :benchmark]
-    matrix = [collect(b)[i] for b in benchmarks, i in 1:3]
-    h_slow, h_fast = highlighters(html_format)
+    headers = [:day, :part, :time, :memory]
+    matrix = Union{Int, Float64}[day.(benchmarks) part.(benchmarks) btime.(benchmarks) bmemory.(benchmarks)]
+    h = highlighters(html_format)
+    f = (v,i,j) -> j == 3 ? BenchmarkTools.prettytime(v) : j==4 ? BenchmarkTools.prettymemory(v) : v
     backend = html_format ? :html : :text
 
-    # print in screen in text format
-    pretty_table(matrix, headers, highlighters=highlighters(false))
+    hlines = 2:2:length(benchmarks) |> collect
 
-    return pretty_table(String, matrix, headers, highlighters=(h_slow, h_fast), backend=backend)
+    # print in screen in text format
+    pretty_table(
+        matrix, headers, highlighters=highlighters(false), formatters=f, body_hlines=hlines
+    )
+
+    return pretty_table(
+        String, matrix, headers, highlighters=h, formatters=f, body_hlines=hlines, backend=backend
+    )
 end
 
-function highlighters(html_format=false, slow=1e6, fast=1e5)
-    slow_f = (data,i,j)->j==3 && time(data[i,j]) > slow
-    fast_f = (data,i,j)->j==3 && time(data[i,j]) < fast
+function highlighters(html_format=false, very_slow=5e8, slow=5e6, fast=2e5)
+    very_slow_f = (data,i,j)->j==3 && data[i,j] > very_slow
+    slow_f = (data,i,j)->j==3 && slow < data[i,j] < very_slow
+    fast_f = (data,i,j)->j==3 && data[i,j] < fast
 
     if html_format
-        h_slow = HTMLHighlighter(slow_f, HTMLDecoration(color = "red", font_weight = "bold"))
+        h_very_slow = HTMLHighlighter(very_slow_f, HTMLDecoration(color = "red", font_weight = "bold"))
+        h_slow = HTMLHighlighter(slow_f, HTMLDecoration(color = "yellow", font_weight = "bold"))
         h_fast = HTMLHighlighter(fast_f, HTMLDecoration(color = "green", font_weight = "bold"))
-        return h_slow, h_fast
+        return h_very_solw, h_slow, h_fast
     end
-    h_slow = Highlighter(slow_f, bold = true, foreground = :red)
+    h_very_slow = Highlighter(very_slow_f, bold = true, foreground = :red)
+    h_slow = Highlighter(slow_f, bold = true, foreground = :yellow)
     h_fast = Highlighter(fast_f, bold = true, foreground = :green)
-    return h_slow, h_fast
+    return h_very_slow, h_slow, h_fast
 end
 
 function generate_readme(table, html_format=false)
