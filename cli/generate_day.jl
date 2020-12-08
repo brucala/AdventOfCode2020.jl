@@ -52,7 +52,7 @@ function write_file(filename, template, nday)
     file = open(filename, "w")
     printfmt(file, template, nday)
     close(file)
-    println("file $filename generated")
+    @info "file $filename generated"
 end
 
 function generate_files(nday)

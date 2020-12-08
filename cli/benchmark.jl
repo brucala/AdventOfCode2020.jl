@@ -114,7 +114,7 @@ function generate_readme(table, html_format=false)
     end
     printfmt(file, readme_template, table)
     close(file)
-    println("file $filename generated")
+    @info "file $filename generated"
 end
 
 function parse_commandline()
