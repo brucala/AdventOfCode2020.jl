@@ -3,6 +3,8 @@ using BenchmarkTools
 using PrettyTables
 using ArgParse, Formatting
 
+const VERY_SLOW, SLOW, FAST = 1e8, 2e6, 2e5
+
 const readme_template = FormatExpr(
 """
 # Advent of Code 2020
@@ -87,10 +89,10 @@ function benchmark_table(benchmarks, html_format=false)
     return pretty_table(String, matrix, headers; highlighters=h, common_kwargs...)
 end
 
-function highlighters(html_format=false, very_slow=5e8, slow=5e6, fast=2e5)
-    very_slow_f = (data,i,j)->j==3 && data[i,j] > very_slow
-    slow_f = (data,i,j)->j==3 && slow < data[i,j] < very_slow
-    fast_f = (data,i,j)->j==3 && data[i,j] < fast
+function highlighters(html_format=false)
+    very_slow_f = (data,i,j)->j==3 && data[i,j] > VERY_SLOW
+    slow_f = (data,i,j)->j==3 && SLOW < data[i,j] < VERY_SLOW
+    fast_f = (data,i,j)->j==3 && data[i,j] < FAST
 
     if html_format
         h_very_slow = HTMLHighlighter(very_slow_f, HTMLDecoration(color = "red", font_weight = "bold"))
