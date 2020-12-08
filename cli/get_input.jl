@@ -2,6 +2,9 @@ using ArgParse, HTTP, Dates, TimeZones
 
 # only 2020 for now
 const URL = "https://adventofcode.com/2020/day/"
+
+# session cookie should be stored in .session_token file
+# how to get cookie: https://github.com/wimglenn/advent-of-code-wim/issues/1
 const SESSION_AUTH = Dict("session"=>open(readline, ".session_token"))
 
 function parse_commandline()
