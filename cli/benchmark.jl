@@ -26,7 +26,7 @@ To run the benchmarks:
 
 To generate (src and test) templates for a given day:
 ```
-$ julia cli/generate_day.jl -h
+\$ julia cli/generate_day.jl -h
 usage: generate_day.jl [-h] nday
 
 positional arguments:
@@ -38,7 +38,7 @@ optional arguments:
 
 To download input data of a given day:
 ```
-$ julia cli/get_input.jl -h
+\$ julia cli/get_input.jl -h
 usage: get_input.jl [-d DAY] [-h]
 
 optional arguments:
