@@ -10,13 +10,11 @@ const SESSION_AUTH = Dict("session"=>open(readline, ".session_token"))
 function parse_commandline()
     s = ArgParseSettings()
 
-    default_day = min(today(), Date(2020, 12, 25)) |> day
     @add_arg_table! s begin
         "--day", "-d"
-            help = "day number for files to be generated"
+            help = "day number for the input to be downloaded. If not given take today's input"
             arg_type = Int
             range_tester = x -> 1 <= x <=25
-            default = default_day
     end
 
     return parse_args(s)
@@ -31,9 +29,12 @@ function timeleft(nday)
     return Δt
 end
 
+default_day() = min(today(), Date(2020, 12, 25)) |> day
+
 function main()
     parsed_args = parse_commandline()
     nday = parsed_args["day"]
+    if isnothing(nday) nday = default_day() end
 
     filename = "data/input$nday.txt"
 
