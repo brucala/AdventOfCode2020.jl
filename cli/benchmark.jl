@@ -77,17 +77,14 @@ function benchmark_table(benchmarks, html_format=false)
     h = highlighters(html_format)
     f = (v,i,j) -> j == 3 ? BenchmarkTools.prettytime(v) : j==4 ? BenchmarkTools.prettymemory(v) : v
     backend = html_format ? :html : :text
-
     hlines = 2:2:length(benchmarks) |> collect
 
-    # print in screen in text format
-    pretty_table(
-        matrix, headers, highlighters=highlighters(false), formatters=f, body_hlines=hlines
-    )
+    common_kwargs = (crop=:none, formatters=f, body_hlines=hlines)
 
-    return pretty_table(
-        String, matrix, headers, highlighters=h, formatters=f, body_hlines=hlines, backend=backend
-    )
+    # print in screen in text format
+    pretty_table(matrix, headers; highlighters=highlighters(false), common_kwargs...)
+
+    return pretty_table(String, matrix, headers; highlighters=h, common_kwargs...)
 end
 
 function highlighters(html_format=false, very_slow=5e8, slow=5e6, fast=2e5)
