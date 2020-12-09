@@ -8,10 +8,12 @@ function valid_xmas(preamble, x)
 
     iseven(x) && count(==(half), x) >=2 && return true
 
-    preamble_set = Set(preamble)
-    while length(preamble_set) > 1
-        y = x - pop!(preamble_set)
-        y ∈ preamble_set && return true
+    # the array version seems 3x faster
+    #preamble_set = Set(preamble)
+    preamble = copy(preamble)
+    while length(preamble) > 1
+        y = x - pop!(preamble)
+        y ∈ preamble && return true
     end
     return false
 end
@@ -34,18 +36,18 @@ end
 to_int(x) = parse(Int, x)
 read_ints(x) = readlines(IOBuffer(x)) .|> to_int
 
-function solve1(x, n=25)
-    data = read_ints(x)
-
-    for i in (n+1):length(data)
-        !valid_xmas(data[i-n:i-1], data[i]) && return data[i]
+function solve1(x::Vector{Int}, n=25)
+    for i in (n+1):length(x)
+        !valid_xmas(x[i-n:i-1], x[i]) && return x[i]
     end
     return "solution not found"
 end
 
+solve1(x, n=25) = solve1(read_ints(x), n)
+
 function solve2(x, n=25)
     data = read_ints(x)
-    invalid = solve1(x, n)
+    invalid = solve1(data, n)
     return find_weakness(data, invalid)
 end
 
