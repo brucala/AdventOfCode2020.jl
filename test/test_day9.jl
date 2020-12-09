@@ -1,3 +1,5 @@
+module test_day9
+
 using Test
 using AdventOfCode2020.Day9
 using AdventOfCode2020: read_input
@@ -39,3 +41,5 @@ end
     @test solve1(data) == 756008079
     @test solve2(data) == 93727241
 end
+
+end  # module

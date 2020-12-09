@@ -20,6 +20,8 @@ end  # module
 
 const test_template = FormatExpr(
 """
+module test_day{1}
+
 using Test
 using AdventOfCode2020.Day{1}
 using AdventOfCode2020: read_input
@@ -41,6 +43,8 @@ end
     @test solve1(data) == ?
     #@test solve2(data) == ?
 end
+
+end  # module
 """
 )
 
