@@ -11,7 +11,7 @@ using AdventOfCode2020
     @safetestset "Day 6" begin include("test_day6.jl") end
     @safetestset "Day 7" begin include("test_day7.jl") end
     @safetestset "Day 8" begin include("test_day8.jl") end
-    #@safetestset "Day 9" begin include("test_day9.jl") end
+    @safetestset "Day 9" begin include("test_day9.jl") end
     #@safetestset "Day 10" begin include("test_day10.jl") end
     #@safetestset "Day 11" begin include("test_day11.jl") end
     #@safetestset "Day 12" begin include("test_day12.jl") end
