@@ -36,7 +36,7 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
-To download input data of a given day:
+To download the input data of a given day:
 ```
 \$ julia cli/get_input.jl -h
 usage: get_input.jl [-d DAY] [-h]
