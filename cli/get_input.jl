@@ -46,8 +46,6 @@ function main()
         return
     end
 
-    @show SESSION_AUTH
-
     io = open(filename, "w")
     day_url = URL * "$nday/input"
     response = HTTP.get(day_url; cookies=SESSION_AUTH, response_stream=io)
