@@ -1,5 +1,4 @@
 module Day7
-using DataStructures
 
 export solve1, solve2
 
@@ -45,10 +44,10 @@ function howmany(bags, bag)
 end
 
 function extract_containers(x)
-    bags = DefaultDict{String, Set{String}}(Set{String})
+    bags = Dict{String, Set{String}}()
     for line = readlines(IOBuffer(x))
         parent, rules = extract_rule(line)
-        [push!(bags[bag], parent) for bag in rules[1]]
+        [push!(get!(bags, bag, Set{String}()), parent) for bag in rules[1]]
     end
     return bags
 end
@@ -61,7 +60,7 @@ function solve1(x)
     while !isempty(search)
         for bag in search
             push!(seen, bag)
-            union!(sol, bags[bag])
+            union!(sol, get!(bags, bag, Set{String}()))
         end
         search = setdiff(sol, seen)
     end
