@@ -12,12 +12,17 @@ function noccupied_neighbors(grid, i, j)
     noccupied(@view grid[max(i-1, 1):min(i+1, n), max(j-1, 1):min(j+1, m)])
 end
 
+const DIRS = [(i,j) for i=-1:1, j=-1:1 if (i,j)!=(0,0)]
 function noccupied_neighbors(grid, i, j, fulldepth)
     # because it's much faster
     fulldepth || return noccupied_neighbors(grid, i, j)
-
-    directions = [(i,j) for i=-1:1, j=-1:1 if (i,j)!=(0,0)]
-    return sum(find_occupied(grid, i, j, dir, fulldepth) for dir in directions)
+    #return sum(find_occupied(grid, i, j, dir, fulldepth) for dir in DIRS)
+    # slightly faster than the above
+    n = 0
+    for d in DIRS
+        n += find_occupied(grid, i, j, d, fulldepth)
+    end
+    return n
 end
 
 function find_occupied(grid, i, j, direction, fulldepth)
@@ -32,7 +37,7 @@ function find_occupied(grid, i, j, direction, fulldepth)
     return 0
 end
 
-function step(grid, i, j, fulldepth)
+function newseat(grid, i, j, fulldepth)
     grid[i,j] == '.' && return '.'
     nocc = noccupied_neighbors(grid, i, j, fulldepth)
     grid[i,j] == 'L' && nocc == 0 && return '#'
@@ -41,15 +46,14 @@ function step(grid, i, j, fulldepth)
     return grid[i,j]
 end
 
-function step(grid, fulldepth)
-    oldg = copy(grid)
+function step!(grid, oldg, fulldepth)
     n, m = size(grid)
     changed = false
     for i in 1:n, j in 1:m
-        grid[i,j] = step(oldg, i, j, fulldepth)
-        if grid[i,j] != oldg[i,j] changed = true end
+        grid[i,j] = newseat(oldg, i, j, fulldepth)
+        changed = changed || grid[i,j] != oldg[i,j]
     end
-    grid, !changed
+    return !changed
 end
 
 function get_grid(x)
@@ -59,11 +63,13 @@ end
 
 function solve(x, fulldepth=false)
     grid = get_grid(x)
+    oldg = copy(grid)
     i = 0
     while true
         i += 1
-        grid, stop = step(grid, fulldepth)
-        stop && break
+        step!(grid, oldg, fulldepth) && break
+        # this reduces memory use, but doesn't improve time performance
+        copyto!(oldg, grid)
     end
     return noccupied(grid)
 end
