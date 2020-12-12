@@ -10,11 +10,16 @@ Base.:(+)(d::Direction, n::Int) = Direction((Int(d) + n) % 4)
 turn(d::Direction, angle::Int) = d + (angle ÷ 90)
 turn(d::Direction, angle::Int, right::Bool) = turn(d, right ? angle : 360 - angle)
 
-move(d::Direction, n::Int, pos::Tuple{Int, Int}) = move(Val(d), n, pos...)
-move(::Val{E}, n::Int, x::Int, y::Int) = (x + n, y    )
-move(::Val{W}, n::Int, x::Int, y::Int) = (x - n, y    )
-move(::Val{N}, n::Int, x::Int, y::Int) = (x    , y + n)
-move(::Val{S}, n::Int, x::Int, y::Int) = (x    , y - n)
+const dir_dict = Dict(E=>(1,0), W=>(-1,0), N=>(0,1), S=>(0,-1))
+function move(d::Direction, n::Int, pos::Tuple{Int, Int})
+    return pos .+ n .* dir_dict[d]
+end
+# using Val and multiple dispatch is ~10x slower :(
+#move(d::Direction, n::Int, pos::Tuple{Int, Int}) = move(Val(d), n, pos...)
+#move(::Val{E}, n::Int, x::Int, y::Int) = (x + n, y    )
+#move(::Val{W}, n::Int, x::Int, y::Int) = (x - n, y    )
+#move(::Val{N}, n::Int, x::Int, y::Int) = (x    , y + n)
+#move(::Val{S}, n::Int, x::Int, y::Int) = (x    , y - n)
 
 # Part's 1 ship
 Base.@kwdef mutable struct Ship
@@ -47,9 +52,7 @@ turn!(s::Ship2, angle::Int, right::Bool) = s.waypoint = turn(s.waypoint, angle, 
 function turn(position::Tuple{Int, Int}, angle::Int, right::Bool)
     x, y = position
     angle == 180 && return -x, -y
-    if !right
-        angle = angle == 90 ? 270 : 90
-    end
+    angle = right ? angle : 360 - angle
     return angle == 90 ? (y, -x) : (-y, x)
 end
 
