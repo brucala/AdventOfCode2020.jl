@@ -20,14 +20,12 @@ expected = [3417, 754018, 779210, 1261476, 1202161486]
 @testset "Day$nday tests" begin
     @test solve1(test) == 5 * 59
     @test solve2(test) == 1068781
-    for (t, e) in zip(other_tests, expected)
-        @test solve2(t) == e
-    end
+    @test solve2.(other_tests) == expected
 end
 
 @testset "Day$nday solutions" begin
     @test solve1(data) == 3966
-    #@test solve2(data) == ?
+    @test solve2(data) == 800177252346225
 end
 
 end  # module
