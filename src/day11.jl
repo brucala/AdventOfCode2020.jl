@@ -16,7 +16,7 @@ const DIRS = [(i,j) for i=-1:1, j=-1:1 if (i,j)!=(0,0)]
 function noccupied_neighbors(grid, i, j, fulldepth)
     # because it's much faster
     fulldepth || return noccupied_neighbors(grid, i, j)
-    #return sum(find_occupied(grid, i, j, dir, fulldepth) for dir in DIRS)
+    # return sum(find_occupied(grid, i, j, dir, fulldepth) for dir in DIRS)
     # slightly faster than the above
     n = 0
     for d in DIRS
