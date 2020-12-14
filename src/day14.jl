@@ -13,17 +13,20 @@ xto(s, b) = map(x->x=='X' ? b : x, s) |> toint
 toint(s) = parse(Int, s, base=2)
 mask(x::Int, m::Mask) = (x & m.mask0) | m.mask1
 
+tobits(x) = string(x, base=2, pad=36)
+mask(x::Int, m::AbstractString) = mask(tobits(x), m) |> toint
+mask(x::AbstractString, m::AbstractString) = join(mi=='1' ? '1' : mi=='0' ? '0' : xi for (xi, mi) in zip(x, m))
+
 # part 2
-addresses(x, m) = toint.(replaceX(mask2(x, m)))
-function mask2(x, m)
-    s = string(x, base=2, pad=36) |> collect
-    return join(vm == 'X' ? vm : vm == '1' ? '1' : vs for (vs, vm) in zip(s, m))
+function addresses(x::Int, m::AbstractString, floating_bits)
+    x = x | xto(m, '1')
+    return addresses(x, floating_bits)
 end
-function replaceX(s::AbstractString)
-    'X' ∉ s && return (s, )
-    s0 = replace(s, 'X'=>'0', count=1)
-    s1 = replace(s, 'X'=>'1', count=1)
-    return (replaceX(s0)..., replaceX(s1)...)
+function addresses(x::Int, floating_bits::Vector{Int})
+    isempty(floating_bits) && return (x, )
+    bit = floating_bits[1]
+    x1, x0 = x | bit, x & ~bit
+    return (addresses(x1, floating_bits[2:end])..., addresses(x0, floating_bits[2:end])...)
 end
 
 function getline(x)
@@ -35,6 +38,7 @@ end
 
 function solve1(x)
     m::Mask = Mask(0, 0)
+    #m = 0
     mem = Dict{Int, Int}()
     for line = readlines(IOBuffer(x))
         k, v = getline(line)
@@ -49,14 +53,16 @@ end
 
 function solve2(x)
     m = ""
+    floating_bits = Int[]
     mem = Dict{Int, Int}()
     for line = readlines(IOBuffer(x))
         k, v = getline(line)
         if k == :mask
             m = v
+            floating_bits = [2^(i-1) for i in findall(==('X'), reverse(m))]
             continue
         end
-        for i in addresses(k, m)
+        for i in addresses(k, m, floating_bits)
             mem[i] = v
         end
     end
