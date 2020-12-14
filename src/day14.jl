@@ -13,10 +13,6 @@ xto(s, b) = map(x->x=='X' ? b : x, s) |> toint
 toint(s) = parse(Int, s, base=2)
 mask(x::Int, m::Mask) = (x & m.mask0) | m.mask1
 
-tobits(x) = string(x, base=2, pad=36)
-mask(x::Int, m::AbstractString) = mask(tobits(x), m) |> toint
-mask(x::AbstractString, m::AbstractString) = join(mi=='1' ? '1' : mi=='0' ? '0' : xi for (xi, mi) in zip(x, m))
-
 # part 2
 function addresses(x::Int, m::AbstractString, floating_bits)
     x = x | xto(m, '1')
@@ -38,7 +34,6 @@ end
 
 function solve1(x)
     m::Mask = Mask(0, 0)
-    #m = 0
     mem = Dict{Int, Int}()
     for line = readlines(IOBuffer(x))
         k, v = getline(line)
