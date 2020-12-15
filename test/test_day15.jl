@@ -20,4 +20,6 @@ end
     @test solve2(data) == 16671510
 end
 
+# AOCplot(data)
+
 end  # module
