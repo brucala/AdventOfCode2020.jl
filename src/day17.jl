@@ -7,15 +7,12 @@ const N_CYCLES = 6
 function get_grid(x, fourD=false)
     x = split(x)
     n = length(x)
+    x = Iterators.flatten(x)
     dims = fourD ? (n, n, 1, 1) : (n, n, 1)
-    grid = falses(dims .+ 2*(N_CYCLES+1))
-    for i in 1:n
-        if !fourD
-            grid[N_CYCLES+i+1, N_CYCLES+2:N_CYCLES+n+1, N_CYCLES+2] = map(==('#'), collect(x[i]))
-        else
-            grid[N_CYCLES+i+1, N_CYCLES+2:N_CYCLES+n+1, N_CYCLES+2, N_CYCLES+2] = map(==('#'), collect(x[i]))
-        end
-    end
+    m = N_CYCLES+1
+    grid = falses(dims .+ 2m)
+    ranges = fourD ? (m+1:m+n, m+1:m+n, m+1, m+1) : (m+1:m+n, m+1:m+n, m+1)
+    grid[ranges...] = map(==('#'), x)
     return grid
 end
 
