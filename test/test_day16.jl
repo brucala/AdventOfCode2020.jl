@@ -21,8 +21,7 @@ nearby tickets:
 7,3,47
 40,4,50
 55,2,20
-38,6,12
-"""
+38,6,12"""
 
 test2 =
 """
@@ -36,8 +35,7 @@ your ticket:
 nearby tickets:
 3,9,18
 15,1,5
-5,14,9
-"""
+5,14,9"""
 
 @testset "Day$nday tests" begin
     @test solve1(test) == 71

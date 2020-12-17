@@ -24,7 +24,7 @@ isvalid_rule(rule::Rule, fields::Vector{Int}) = all(f -> isvalid_field(rule, f),
 isvalid_matrix(rules::Vector{Rule}, tickets::Matrix{Int}) = [Day16.isvalid_rule(r, tickets[:,f]) for r in rules, f in 1:size(tickets)[2]]
 
 function extract_notes(x)
-    rules, tickets = Rule[], []
+    rules, tickets = Rule[], Vector{Vector{Int}}(undef, 0)
     isrule = true
     for line in readlines(IOBuffer(x))
         isrule = isrule && !occursin("ticket", line)
@@ -32,7 +32,7 @@ function extract_notes(x)
         if isrule
             push!(rules, Rule(line))
         elseif isdigit(line[1])
-            push!(tickets, split(line, ',') |> toint)
+            push!(tickets, extract_ticket(line))
         end
     end
     return rules, tickets[1], tickets[2:end]
@@ -40,15 +40,15 @@ end
 
 # this is slower
 # function extract_notes(x)
-#     rules, yours, nearby = split(x, "\n\n")
-#     rules = Rule.(split(rules, '\n'))
-#     yours = extract_tickets(yours)
-#     nearby = extract_tickets(nearby)
-#     return rules, yours[1], nearby
+#     rules, yours, nearby = split(x, "\n\n") .|> splitlines
+#     rules = Rule.(rules)
+#     yours = extract_ticket(yours[2])
+#     nearby = extract_ticket.(nearby[2:end])
+#     return rules, yours, nearby
 # end
-# extract_tickets(x) = split.(split(strip(x), '\n')[2:end], ',') .|> toint
-
-toint(x) = parse.(Int, x)
+# splitlines(x) = split(x, '\n')
+extract_ticket(x) = split(x, ',') .|> toint
+toint(x) = parse(Int, x)
 
 function extract_fields(field_names, indices, matrix, i, j)
     fname = popat!(field_names, j)
