@@ -72,6 +72,7 @@ day(b::AOCBenchmark) = b.day
 part(b::AOCBenchmark) = b.part
 btime(b::AOCBenchmark) = time(b.benchmark)
 bmemory(b::AOCBenchmark) = memory(b.benchmark)
+ballocs(b::AOCBenchmark) = allocs(b.benchmark)
 
 function benchmark(day_module::Module, data)
     sols = available_solvers(day_module)
@@ -99,8 +100,8 @@ end
 function benchmark_table(benchmarks, html_format=false)
     # TODO: do something nicer
     # e.g. show benchmark params, nsamples, ...
-    headers = [:day, :part, :time, :memory]
-    matrix = Union{Int, Float64}[day.(benchmarks) part.(benchmarks) btime.(benchmarks) bmemory.(benchmarks)]
+    headers = [:day, :part, :time, :memory, :allocs]
+    matrix = Union{Int, Float64}[day.(benchmarks) part.(benchmarks) btime.(benchmarks) bmemory.(benchmarks) ballocs.(benchmarks)]
     h = highlighters(html_format)
     f = (v,i,j) -> j == 3 ? BenchmarkTools.prettytime(v) : j==4 ? BenchmarkTools.prettymemory(v) : v
     backend = html_format ? :html : :text
