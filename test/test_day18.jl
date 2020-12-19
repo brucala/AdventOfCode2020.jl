@@ -21,12 +21,16 @@ tests = [
     @testset for (x, y, z) in tests
         @test solve1(x) == y
         @test solve2(x) == z
+        @test solve1_alt(x) == y
+        @test solve2_alt(x) == z
     end
 end
 
 @testset "Day$nday solutions" begin
     @test solve1(data) == 14208061823964
     @test solve2(data) == 320536571743074
+    @test solve1_alt(data) == 14208061823964
+    @test solve2_alt(data) == 320536571743074
 end
 
 end  # module

@@ -1,6 +1,27 @@
 module Day18
 
-export solve1, solve2
+export solve1, solve2, solve1_alt, solve2_alt
+
+######################################################
+# alternative and more elegant solution... but slow :(
+
+⊕(x,y) = *(x,y) # ⊕ -> customizable binary operator with same precedence as +
+⊗(x,y) = +(x,y) # ⊗ -> customizable binary operator with same precedence as *
+
+function replace_all(x, operators...)
+    for op in operators
+        x = replace(x, op)
+    end
+    return x
+end
+
+evaluate(expr) = eval(Meta.parse(expr))
+solve_alt(x, operators...) = replace_all(x, operators...) |> IOBuffer |> readlines .|> evaluate |> sum
+solve1_alt(x) = solve_alt(x, '*'=>'⊕')
+solve2_alt(x) = solve_alt(x, '*'=>'⊕', '+'=>'⊗')
+
+######################################################
+# original solution
 
 function extract(x, i=1)
     elements = []
