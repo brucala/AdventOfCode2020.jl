@@ -29,7 +29,6 @@ function Tile(x::AbstractString)
     grid = getgrid(x[2:end])
     Tile(id, grid, Dict())
 end
-
 len(t::Tile) = size(t.grid)[1]
 
 border(::Val{N}, t::Tile) = t.grid[1,:]
@@ -94,12 +93,11 @@ const SEA_MONSTER_STR =
 #    ##    ##    ###
  #  #  #  #  #  #  .
 """
-
 const SEA_MONSTER = getgrid(SEA_MONSTER_STR)
 
 const Δ = Dict(E => (0,1), W => (0, -1), S => (1, 0), N => (-1, 0))
 
-# flip is around the axis. E.g. vflip is around vertical axis
+# a flip is around the axis. E.g. vflip is around vertical axis
 vflip(grid) = grid[1:end, end:-1:1]
 hflip(grid) = grid[end:-1:1, 1:end]
 flip(axis::Dir, grid) = isvertical(axis) ? vflip(grid) : hflip(grid)
@@ -150,10 +148,8 @@ function image(tiles)
     Ngrids = length(tiles)
     N = (Npixels - 2) * Int(√Ngrids)
     image = falses(N, N)
-
     # find first (top-left)
     tid = findfirst(t -> Set(values(t.neighbors)) == Set([E, S]), tiles)
-
     # create image using top left corner as seed
     image!(image, tiles, tid, 1, 1)
 end
@@ -196,19 +192,16 @@ end
 
 function solve2(x)
     grids = parse_input(x)
-
     # find the neighbors
     n = noverlaps(grids)
-
+    # rearrange orientations
     tile = grids[findfirst(==(2), n)]  # a corner
     tiles = Dict(t.id => t for t in grids)
-
     fix_and_fit!(tiles, tile.id)
-
+    # make image
     img = image(tiles)
-
+    # scan for sea monster and get solution
     return scan_sea_monsters(img)
 end
-
 
 end  # module
