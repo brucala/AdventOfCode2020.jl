@@ -1,6 +1,6 @@
 module Day20
 
-export solve1, solve2
+export solve1#, solve2
 
 const SEA_MONSTER_STR =
 """
@@ -25,8 +25,6 @@ end
 getgrid(x::AbstractString) = getgrid(split(strip(x, '\n'), '\n'))
 function getgrid(x)
     n, m = length(x), length(x[1])
-    @show x
-    @show n,m
     grid = map(==('#'), Iterators.flatten(x))
     return reshape(grid, (m,n))'  # so it's well oriented
 end
