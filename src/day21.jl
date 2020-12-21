@@ -60,7 +60,8 @@ function solve1(x)
 end
 function solve2(x)
     _, _, candidates = solve(x)
-    return join([string(first(ing)) for ing in values(sort(candidates))], ',')
+    candidates = sort(collect(candidates), by=x->x[1])
+    return join([string(first(ing)) for (_, ing) in candidates], ',')
 end
 
 end  # module
