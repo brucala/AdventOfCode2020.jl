@@ -20,14 +20,17 @@ function round!(decks)
     cards[1] > cards[2] ? append!(decks[1], cards) : append!(decks[2], reverse(cards))
 end
 
-const SetOfDecks = Set{Tuple{Vector{Int}, Vector{Int}}}
+# I think there shouldn't be collisions
+key(deck1, deck2) = score(deck1)-100*score(deck2)
 
 function recursive_combat!(deck1, deck2)
-    seen=SetOfDecks()
+    seen=Set{Int}()
     winner = 0
     while !(isempty(deck1) || isempty(deck2))
-        (deck1, deck2) ∈ seen && return 1
-        push!(seen, deepcopy.((deck1, deck2)))
+        # way faster than using tuple of decks as key
+        state = key(deck1, deck2)
+        state ∈ seen && return 1
+        push!(seen, state)
         winner = recursive_round!((deck1, deck2))
     end
     return winner
