@@ -7,7 +7,7 @@ export solve1, solve2, AOCplot
 mutable struct Game
     t::Int
     n::Int
-    played::Vector{Int}
+    played::Vector{Int32}
     tracking::Bool
     ntmax::Vector{Tuple{Int, Int}}
 end
@@ -16,9 +16,9 @@ function Game(x::Vector{Int}, N, tracking)
     ntmax = tracking ? [reverse(findmax(x))] : Tuple{Int, Int}[]
     t = length(x)
     n = pop!(x)
-    played = zeros(Int, N)
+    played = zeros(Int32, N)
     for (i,v) in enumerate(x)
-        played[v+1] = i
+        @inbounds played[v+1] = i
     end
     Game(t, n, played, tracking, ntmax)
 end
@@ -41,7 +41,7 @@ end
 
 function solve(x, n, tracking)
     g = Game(x, n, tracking)
-    for t in g.t+1:n
+    for _ in g.t+1:n
         next!(g)
     end
     return g
