@@ -11,7 +11,7 @@ nrotations(from::Dir, to::Dir) = Int(to + (4 - Int(from)))
 sameaxis(d1::Dir, d2::Dir) = d1 === d2 || d1 === opposite(d2)
 isvertical(d::Dir) = d === N || d === S
 
-bitGrid(x) = BitMatrix(map(==('#'), getgrid(x)))
+bitGrid(x) = getgrid(x,==('#'))
 
 mutable struct Tile
     id::Int
