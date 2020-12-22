@@ -1,8 +1,8 @@
 module Day20
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
-
-toint(x) = parse(Int, x)
 
 @enum Dir N E S W
 Base.:(+)(d::Dir, n::Int) = Dir((Int(d) + n) % 4)
@@ -11,12 +11,7 @@ nrotations(from::Dir, to::Dir) = Int(to + (4 - Int(from)))
 sameaxis(d1::Dir, d2::Dir) = d1 === d2 || d1 === opposite(d2)
 isvertical(d::Dir) = d === N || d === S
 
-getgrid(x::AbstractString) = getgrid(split(strip(x, '\n'), '\n'))
-function getgrid(x)
-    n, m = length(x), length(x[1])
-    grid = map(==('#'), Iterators.flatten(x))
-    return reshape(grid, (m,n))'  # so it's well oriented
-end
+bitGrid(x) = BitMatrix(map(==('#'), getgrid(x)))
 
 mutable struct Tile
     id::Int
@@ -24,9 +19,9 @@ mutable struct Tile
     neighbors::Dict{Int, Dir}
 end
 function Tile(x::AbstractString)
-    x = split(strip(x), '\n')
+    x = splitlines(strip(x))
     id = x[1][6:end-1] |> toint
-    grid = getgrid(x[2:end])
+    grid = bitGrid(x[2:end])
     Tile(id, grid, Dict())
 end
 len(t::Tile) = size(t.grid)[1]
@@ -93,7 +88,7 @@ const SEA_MONSTER_STR =
 #    ##    ##    ###
  #  #  #  #  #  #  .
 """
-const SEA_MONSTER = getgrid(SEA_MONSTER_STR)
+const SEA_MONSTER = bitGrid(SEA_MONSTER_STR)
 
 const Δ = Dict(E => (0,1), W => (0, -1), S => (1, 0), N => (-1, 0))
 

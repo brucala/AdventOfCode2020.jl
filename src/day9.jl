@@ -1,4 +1,6 @@
 module Day9
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
 
@@ -32,9 +34,6 @@ function find_weakness(data, x)
     end
     return "weakness not found"
 end
-
-to_int(x) = parse(Int, x)
-read_ints(x) = readlines(IOBuffer(x)) .|> to_int
 
 function solve1(x::Vector{Int}, n=25)
     for i in (n+1):length(x)

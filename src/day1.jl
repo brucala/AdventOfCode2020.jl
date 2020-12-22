@@ -1,11 +1,11 @@
 module Day1
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
 
-to_int(x::String) = parse.(Int, split(x))
-
 function solve1(x)
-    x = to_int(x)
+    x = read_ints(x)
     n = length(x)
     for a = x[1:n-1]
         for b = x[2:n]
@@ -16,7 +16,7 @@ function solve1(x)
 end
 
 function solve2(x)
-    x = to_int(x)
+    x = read_ints(x)
     n = length(x)
     for a = x[1:n-2]
         for b = x[2:n-1]

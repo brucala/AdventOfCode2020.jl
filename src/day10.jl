@@ -1,9 +1,8 @@
 module Day10
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
-
-to_int(x) = parse(Int, x)
-read_ints(x) = readlines(IOBuffer(x)) .|> to_int
 
 function solve1(x)
     data = read_ints(x)

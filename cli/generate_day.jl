@@ -3,6 +3,8 @@ using ArgParse, Formatting
 const day_template = FormatExpr(
 """
 module Day{}
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
 

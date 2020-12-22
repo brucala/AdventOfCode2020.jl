@@ -1,4 +1,6 @@
 module Day16
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
 
@@ -46,9 +48,7 @@ end
 #     nearby = extract_ticket.(nearby[2:end])
 #     return rules, yours, nearby
 # end
-# splitlines(x) = split(x, '\n')
 extract_ticket(x) = split(x, ',') .|> toint
-toint(x) = parse(Int, x)
 
 function extract_fields(field_names, indices, matrix, i, j)
     fname = popat!(field_names, j)

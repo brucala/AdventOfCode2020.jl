@@ -1,11 +1,13 @@
 module Day13
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
 
 function parse_data(x)
     tmin, line = readlines(IOBuffer(x))
-    tmin = parse(Int, tmin)
-    buses = [(parse(Int, bus), i-1) for (i, bus) in enumerate(split(line, ",")) if bus != "x"]
+    tmin = toint(tmin)
+    buses = [(toint(bus), i-1) for (i, bus) in enumerate(split(line, ",")) if bus != "x"]
     return tmin, buses
 end
 

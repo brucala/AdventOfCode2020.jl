@@ -1,10 +1,11 @@
 module Day22
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
 
 parse_input(input) = split(input, "\n\n") .|> parse_deck
-parse_deck(deck) = split(rstrip(deck), '\n')[2:end] .|> toint
-toint(x) = parse(Int, x)
+parse_deck(deck) = splitlines(rstrip(deck))[2:end] .|> toint
 
 score(deck) = deck .* collect(length(deck):-1:1) |> sum
 function combat!(deck1, deck2)

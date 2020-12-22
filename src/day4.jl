@@ -1,4 +1,6 @@
 module Day4
+include("utils.jl")
+using .Utils
 
 export solve1
 export solve2
@@ -37,7 +39,7 @@ Height(x::String) = Height(x[1:end-2], x[end-1:end])
 isheight(h::Height) = isnumeric(h.height) && h.unit in ("in", "cm")
 function isvalid(h::Height)
     !isheight(h) && return false
-    height = parse(Int, h.height)
+    height = toint(h.height)
     return h.unit == "cm" ? 150 <= height <= 193 : 59 <= height <= 76
 end
 
@@ -68,9 +70,9 @@ Passport(x::Dict) = Passport(;x...)
 Passport(x::AbstractString) = Passport(extract_passport(x))
 
 isvalid(f::PassportField) = isvalid(f, f.value)
-isvalid(::Byr, x) = length(x) == 4 && isnumeric(x) && 1920 <= parse(Int, x) <= 2002
-isvalid(::Iyr, x) = length(x) == 4 && isnumeric(x) && 2010 <= parse(Int, x) <= 2020
-isvalid(::Eyr, x) = length(x) == 4 && isnumeric(x) && 2020 <= parse(Int, x) <= 2030
+isvalid(::Byr, x) = length(x) == 4 && isnumeric(x) && 1920 <= toint(x) <= 2002
+isvalid(::Iyr, x) = length(x) == 4 && isnumeric(x) && 2010 <= toint(x) <= 2020
+isvalid(::Eyr, x) = length(x) == 4 && isnumeric(x) && 2020 <= toint(x) <= 2030
 isvalid(::Hgt, x) = isvalid(Height(x))
 isvalid(::Hcl, x) = length(x) == 7 && x[1] == '#' && ishex(x[2:end])
 isvalid(::Ecl, x) = x in eye_colors

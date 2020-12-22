@@ -1,10 +1,9 @@
 module Day19
+include("utils.jl")
+using .Utils
 
 export solve1, solve2
 
-toint(x) = parse(Int, x)
-stripspaces(x) = replace(x, " " => "")
-splitlines(x) = split(x, '\n')
 iscomposed(x) = '|' in x
 fullymatched(x) = !occursin(r"\d+", x)
 
