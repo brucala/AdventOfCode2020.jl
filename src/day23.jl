@@ -4,8 +4,8 @@ using .Utils
 
 export solve1, solve2
 
-minus1(n, N) = (N+n-2) % N + 1
-plus1(n, N) = n % N + 1
+minus1(n, N) = n > 1 ? n - 1 : N
+plus1(n, N) = n < N ? n + 1 : 1
 
 mutable struct Cup
     label::Int
@@ -43,20 +43,21 @@ end
 function move!(cups::Vector{Cup}, cup::Cup)
     N = length(cups)
     current_label = label(cup)
-    tomove = collect(Iterators.take(cup.next, 3))
-    tomove_labels = label.(tomove)
+    # way faster than Iterators.take
+    a, b, c = cup.next, cup.next.next, cup.next.next.next
+    tomove_labels = a.label, b.label, c.label
     destination = minus1(current_label, N)
     while destination ∈ tomove_labels
         destination = minus1(destination, N)
     end
-    cup.next = tomove[end].next
-    tomove[end].next = cups[destination].next
-    cups[destination].next = tomove[1]
+    cup.next = c.next
+    c.next = cups[destination].next
+    cups[destination].next = a
     return cup.next
 end
 
-sol1(cups::Vector{Cup}) = label.(Iterators.take(cups[1].next, 8)) |> join |> toint
-sol2(cups::Vector{Cup}) = prod(label.(Iterators.take(cups[1].next, 2)))
+sol1(cup1::Cup) = label.(Iterators.take(cup1.next, 8)) |> join |> toint
+sol2(cup1::Cup) = cup1.next.label * cup1.next.next.label
 
 function parse_input(x)
     collect(x) .|> toint
@@ -71,7 +72,7 @@ function solve(x, nmoves, ncups, fsol)
         cup = move!(cups, cup)
     end
     #return cups
-    return fsol(cups)
+    return fsol(cups[1])
 end
 
 solve1(x, nmoves=100) = solve(x, nmoves, 0, sol1)
