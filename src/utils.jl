@@ -1,11 +1,11 @@
 module Utils
 
-export read_ints, toint, splitlines, stripspaces, getgrid
+export read_ints, toint, splitlines, stripspaces, getgrid, find
 
 "Reads each line assuming they are integers."
 read_ints(x::AbstractString) = readlines(IOBuffer(x)) .|> toint
 
-toint(s::AbstractString) = parse(Int, s)
+toint(s::Union{AbstractString, Char}) = parse(Int, s)
 
 splitlines(s::AbstractString) = split(s, '\n')
 
@@ -18,5 +18,11 @@ function getgrid(lines::Vector{T}, fmap=identity) where T <: AbstractString
     return reshape(grid, (m,n)) |> permutedims  # so it's well oriented
 end
 
+"""
+    find(collection, element)
+
+Finds index of first occurence of element `a` in collection `A`.
+"""
+find(A, a) = findfirst(==(a), A)
 
 end
