@@ -44,15 +44,17 @@ function move!(cups::Vector{Cup}, cup::Cup)
     N = length(cups)
     current_label = label(cup)
     # way faster than Iterators.take
-    a, b, c = cup.next, cup.next.next, cup.next.next.next
-    tomove_labels = a.label, b.label, c.label
+    pick1 = cup.next
+    pick2 = pick1.next
+    pick3 = pick2.next
+    tomove_labels = pick1.label, pick2.label, pick3.label
     destination = minus1(current_label, N)
     while destination ∈ tomove_labels
         destination = minus1(destination, N)
     end
-    cup.next = c.next
-    c.next = cups[destination].next
-    cups[destination].next = a
+    cup.next = pick3.next
+    pick3.next = cups[destination].next
+    cups[destination].next = pick1
     return cup.next
 end
 
