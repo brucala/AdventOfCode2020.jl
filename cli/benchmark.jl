@@ -22,9 +22,9 @@ To run the benchmarks:
 
 {}
 
-> **Part 0** refers to the **parsing of the input data**. Only for days 22-24 the parsing is
-decoupled from the solutions. For the other days this benchmark only accounts for reading
-the input file, and the actual parsing time is included in each solution.
+> **Part 0** refers to the **parsing of the input data**. Only for days 19, 20, 22-24 the
+parsing is decoupled from the solutions. For the other days this benchmark only accounts
+for reading the input file, and the actual parsing time is included in each solution.
 
 ## Other CLI tools
 
@@ -159,6 +159,10 @@ function generate_readme(table, html_format=false)
     @info "file $filename generated"
 end
 
+function ArgParse.parse_item(::Type{Union{Int, UnitRange}}, x::AbstractString)
+    return ':' in x ? UnitRange(parse.(Int, split(x, ':'))...) : parse(Int, x)
+end
+
 function parse_commandline()
     s = ArgParseSettings()
 
@@ -171,6 +175,10 @@ function parse_commandline()
             arg_type = String
             range_tester = x -> x ∈ ("text", "html")
             default = "text"
+        "--days", "-d"
+            help = "days to benchmark (e.g. 15 or 1:5)"
+            arg_type = Union{Int, UnitRange}
+            default = solved_days
     end
 
     return parse_args(s)
@@ -180,8 +188,9 @@ function main()
     parsed_args = parse_commandline()
     generate_flag = parsed_args["generate-readme"]
     html_format = parsed_args["format"] == "html"
+    days = parsed_args["days"]
 
-    benchmarks = benchmark()
+    benchmarks = benchmark(days)
     table = benchmark_table(benchmarks, html_format)
     generate_flag && generate_readme(table)
 end

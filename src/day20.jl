@@ -1,8 +1,9 @@
 module Day20
 include("utils.jl")
 using .Utils
+import .Utils: parse_input
 
-export solve1, solve2
+export solve1, solve2, parse_input
 
 @enum Dir N E S W
 Base.:(+)(d::Dir, n::Int) = Dir((Int(d) + n) % 4)
@@ -75,8 +76,7 @@ function noverlaps(grids)
     return n
 end
 
-function solve1(x)
-    grids = parse_input(x)
+function solve1(grids)
     n = noverlaps(grids)
     @assert check(n)
     return prod(grids[i].id for i in findall(==(2), n))
@@ -185,8 +185,7 @@ function scan_sea_monsters(image, nrotations, flip)
     return img, monsters
 end
 
-function solve2(x)
-    grids = parse_input(x)
+function solve2(grids)
     # find the neighbors
     n = noverlaps(grids)
     # rearrange orientations

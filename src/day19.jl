@@ -1,13 +1,14 @@
 module Day19
 include("utils.jl")
 using .Utils
+import .Utils: parse_input
 
-export solve1, solve2
+export solve1, solve2, parse_input
 
 iscomposed(x) = '|' in x
 fullymatched(x) = !occursin(r"\d+", x)
 
-function parse_data(x)
+function parse_input(x)
     rules, messages = split(x, "\n\n") .|> splitlines
     return parse_rules(rules), messages
 end
@@ -68,8 +69,8 @@ matches(rules::Vector{String}, message) = any(r->matches(r, message), rules)
 # i don't know how to constrain n and m in the same regex, so will construct several cases
 special_rule(rules, n) = "$(rules[42]){$(n+1),}$(rules[31]){1,$n}"
 
-function solve(x, update=false)
-    rules, messages = parse_data(x)
+function solve(data, update=false)
+    rules, messages = data
     nmax = 4   # for part 2: a bit of brute force... there must be a smarter way
     rule0 = update ? [special_rule(rules, i) for i in 1:nmax] : rules[0]
     nmatches = 0

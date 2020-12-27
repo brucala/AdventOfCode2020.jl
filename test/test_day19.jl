@@ -2,13 +2,12 @@ module test_day19
 
 using Test
 using AdventOfCode2020.Day19
-using AdventOfCode2020: read_input
 
 nday = 19
 
-data = read_input(nday)
+data = parse_input(nday)
 
-test =
+test = parse_input(
 """
 0: 4 1 5
 1: 2 3 | 3 2
@@ -22,8 +21,9 @@ bababa
 abbbab
 aaabbb
 aaaabbb"""
+)
 
-test2 =
+test2 = parse_input(
 """
 42: 9 14 | 10 1
 9: 14 27 | 1 26
@@ -72,6 +72,7 @@ aaaabbaaaabbaaa
 aaaabbaabbaaaaaaabbbabbbaaabbaabaaa
 babaaabbbaaabaababbaabababaaab
 aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba"""
+)
 
 @testset "Day$nday tests" begin
     @test solve1(test) == 2

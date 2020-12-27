@@ -6,8 +6,8 @@ using AdventOfCode2020: read_input
 
 nday = 20
 
-data = read_input(nday)
-test = read_input("test_day$nday.txt")
+data = parse_input(nday)
+test = parse_input(read_input("test_day$nday.txt"))
 
 @testset "Day$nday minimum overlap checks" begin
     @test Day20.check(test)
