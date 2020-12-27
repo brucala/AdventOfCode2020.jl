@@ -1,6 +1,19 @@
 module Utils
 
-export read_ints, toint, splitlines, stripspaces, getgrid, find
+export read_input, parse_input, read_ints, toint, splitlines, stripspaces, getgrid, find
+
+function read_input(file::AbstractString)
+    paths = ["data/" "../data/"]
+    for filepath in joinpath.(paths, file)
+        if isfile(filepath)
+            return readchomp(filepath) |> String
+        end
+    end
+    error("input $file not found in $paths")
+end
+read_input(iday::Int) = read_input("input$iday.txt")
+
+parse_input(iday::Int) = read_input(iday) |> parse_input
 
 "Reads each line assuming they are integers."
 read_ints(x::AbstractString) = readlines(IOBuffer(x)) .|> toint

@@ -2,13 +2,12 @@ module test_day23
 
 using Test
 using AdventOfCode2020.Day23
-using AdventOfCode2020: read_input
 
 nday = 23
 
-data = read_input(nday)
+data = parse_input(nday)
 
-test = "389125467"
+test = "389125467" |> parse_input
 
 @testset "Day$nday tests" begin
     @test solve1(test, 10) == 92658374

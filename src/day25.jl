@@ -1,8 +1,9 @@
 module Day25
 include("utils.jl")
 using .Utils
+import .Utils: parse_input
 
-export solve1
+export solve1, parse_input
 
 parse_input(x) = read_ints(x)
 
@@ -27,8 +28,8 @@ last(p) = first(Iterators.drop(p, length(p)-1))
 transform(subject_number, loop_size) = last(Powers(subject_number, loop_size))
 find_loopsize(subject_number, pubkey) = findfirst(==(pubkey), Powers(subject_number))
 
-function solve1(x)
-    card_pubkey, door_pubkey = parse_input(x)
+function solve1(pubkeys)
+    card_pubkey, door_pubkey = pubkeys
     card_loop_size = find_loopsize(7, card_pubkey)
     encryption_key = transform(door_pubkey, card_loop_size)
 end

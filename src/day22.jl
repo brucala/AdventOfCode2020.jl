@@ -1,8 +1,9 @@
 module Day22
 include("utils.jl")
 using .Utils
+import .Utils: parse_input
 
-export solve1, solve2
+export solve1, solve2, parse_input
 
 parse_input(input) = split(input, "\n\n") .|> parse_deck
 parse_deck(deck) = splitlines(rstrip(deck))[2:end] .|> toint
@@ -51,8 +52,8 @@ function recursive_round!(decks)
     return winner
 end
 
-function solve(x, game!)
-    decks = parse_input(x)
+function solve(data, game!)
+    decks = deepcopy(data)
     win_deck = decks[game!(decks...)]
     return score(win_deck)
 end

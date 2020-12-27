@@ -22,6 +22,10 @@ To run the benchmarks:
 
 {}
 
+> **Part 0** refers to the **parsing of the input data**. Only for days 22-24 the parsing is
+decoupled from the solutions. For the other days this benchmark only accounts for reading
+the input file, and the actual parsing time is included in each solution.
+
 ## Other CLI tools
 
 To generate (src and test) templates for a given day:
@@ -49,6 +53,9 @@ optional arguments:
 """
 )
 
+parse_function(day_module::Module) =
+    :parse_input in names(day_module) ? getfield(day_module, :parse_input) : read_input
+
 function available_solvers(day_module::Module)
     solve_methods = [:solve1, :solve2]
     sols = [getfield(day_module, sol) for sol in solve_methods if sol in names(day_module)]
@@ -67,6 +74,7 @@ struct AOCBenchmark
     benchmark::BenchmarkTools.Trial
 end
 AOCBenchmark(d::String, p::String, b::BenchmarkTools.Trial) = AOCBenchmark(getN(d), getN(p), b)
+AOCBenchmark(d::Int, p::String, b::BenchmarkTools.Trial) = AOCBenchmark(d, getN(p), b)
 
 day(b::AOCBenchmark) = b.day
 part(b::AOCBenchmark) = b.part
@@ -75,8 +83,17 @@ bmemory(b::AOCBenchmark) = memory(b.benchmark)
 ballocs(b::AOCBenchmark) = allocs(b.benchmark)
 
 function benchmark(day_module::Module, data)
-    sols = available_solvers(day_module)
+    nday = getday(day_module) |> getN
     benchmarks = AOCBenchmark[]
+
+    # benchmark input parsing
+    fparse = parse_function(day_module)
+    data = fparse(nday)
+    b = @benchmark $fparse($nday) seconds=0.5 samples=1000
+    push!(benchmarks, AOCBenchmark(nday, 0, b))
+
+    # benchmark available solution
+    sols = available_solvers(day_module)
     for sol in sols
         d, p = getday(day_module), getpart(sol)
         b = @benchmark $sol($data) seconds=0.5 samples=1000
@@ -87,12 +104,11 @@ function benchmark(day_module::Module, data)
     return benchmarks
 end
 
-function benchmark()
+function benchmark(days=solved_days)
     benchmarks = AOCBenchmark[]
-    for nday in solved_days
+    for nday in days
         day = getproperty(AdventOfCode2020, Symbol("Day$nday"))
-        data = read_input(nday)
-        append!(benchmarks, benchmark(day, data))
+        append!(benchmarks, benchmark(day, nday))
     end
     return benchmarks
 end
@@ -105,7 +121,7 @@ function benchmark_table(benchmarks, html_format=false)
     h = highlighters(html_format)
     f = (v,i,j) -> j == 3 ? BenchmarkTools.prettytime(v) : j==4 ? BenchmarkTools.prettymemory(v) : v
     backend = html_format ? :html : :text
-    hlines = 2:2:length(benchmarks) |> collect
+    hlines = 3:3:length(benchmarks) |> collect
 
     common_kwargs = (crop=:none, formatters=f, body_hlines=hlines)
 

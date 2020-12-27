@@ -1,8 +1,9 @@
 module Day24
 include("utils.jl")
 using .Utils
+import .Utils: parse_input
 
-export solve1, solve2
+export solve1, solve2, parse_input
 
 const DIR = Dict(:e => (0, 2), :se => (1, 1), :sw => (1, -1), :w => (0, -2), :nw => (-1, -1), :ne => (-1, 1))
 
@@ -25,8 +26,7 @@ end
 
 get_pos(dirs::Vector{Symbol}) = reduce((x, y) -> x .+ y, (DIR[d] for d in dirs))
 
-function get_black_tiles(x)
-    data = parse_input(x)
+function get_black_tiles(data)
     tile_flips = Dict{Tuple{Int, Int}, Bool}()
     for pos in get_pos.(data)
         tile_flips[pos] = ~get(tile_flips, pos, false)

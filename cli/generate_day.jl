@@ -5,8 +5,9 @@ const day_template = FormatExpr(
 module Day{}
 include("utils.jl")
 using .Utils
+import .Utils: parse_input
 
-export solve1, solve2
+export solve1, solve2, parse_input
 
 function parse_input(x)
     for line = readlines(IOBuffer(x))
@@ -31,15 +32,15 @@ module test_day{1}
 
 using Test
 using AdventOfCode2020.Day{1}
-using AdventOfCode2020: read_input
 
 nday = {1}
 
-data = read_input(nday)
+data = parse_input(nday)
 
-test =
+test = parse_input(
 \"\"\"
 \"\"\"
+)
 
 @testset "Day\$nday tests" begin
     @test solve1(test) == ?

@@ -1,8 +1,9 @@
 module Day23
 include("utils.jl")
 using .Utils
+import .Utils: parse_input
 
-export solve1, solve2
+export solve1, solve2, parse_input
 
 minus1(n, N) = n > 1 ? n - 1 : N
 plus1(n, N) = n < N ? n + 1 : 1
@@ -61,8 +62,7 @@ end
 
 sol2(cups) = Int64(cups[1]) * cups[cups[1]]
 
-function solve(x, nmoves, ncups, fsol)
-    labels = parse_input(x)
+function solve(labels, nmoves, ncups, fsol)
     cups = arrange_cups(labels, ncups)
     current = labels[1]
     for i in 1:nmoves

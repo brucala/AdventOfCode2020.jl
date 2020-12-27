@@ -2,16 +2,17 @@ module test_day25
 
 using Test
 using AdventOfCode2020.Day25
-using AdventOfCode2020: read_input
 
 nday = 25
 
-data = read_input(nday)
+data = parse_input(nday)
 
-test = """
+test = parse_input(
+"""
 5764801
 17807724
 """
+)
 
 @testset "Day$nday tests" begin
     @test solve1(test) == 14897079

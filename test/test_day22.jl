@@ -2,13 +2,12 @@ module test_day22
 
 using Test
 using AdventOfCode2020.Day22
-using AdventOfCode2020: read_input
 
 nday = 22
 
-data = read_input(nday)
+data = parse_input(nday)
 
-test =
+test = parse_input(
 """
 Player 1:
 9
@@ -24,6 +23,7 @@ Player 2:
 7
 10
 """
+)
 
 @testset "Day$nday tests" begin
     @test solve1(test) == 306

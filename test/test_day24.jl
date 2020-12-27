@@ -2,13 +2,12 @@ module test_day24
 
 using Test
 using AdventOfCode2020.Day24
-using AdventOfCode2020: read_input
 
 nday = 24
 
-data = read_input(nday)
+data = parse_input(nday)
 
-test =
+test = parse_input(
 """
 sesenwnenenewseeswwswswwnenewsewsw
 neeenesenwnwwswnenewnwwsewnenwseswesw
@@ -31,6 +30,7 @@ eneswnwswnwsenenwnwnwwseeswneewsenese
 neswnwewnwnwseenwseesewsenwsweewe
 wseweeenwnesenwwwswnew
 """
+)
 
 @testset "Day$nday tests" begin
     @test solve1(test) == 10
