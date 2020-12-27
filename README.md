@@ -117,7 +117,7 @@ To run the benchmarks:
 
 ```
 
-> **Part 0** refers to the **parsing of the input data**. Only for days 19, 20, 22-24 the
+> **Part 0** refers to the **parsing of the input data**. Only for days 19-20, 22-25 the
 parsing is decoupled from the solutions. For the other days this benchmark only accounts
 for reading the input file, and the actual parsing time is included in each solution.
 
