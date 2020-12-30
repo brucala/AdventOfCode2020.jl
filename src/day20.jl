@@ -31,7 +31,10 @@ border(::Val{N}, t::Tile) = t.grid[1,:]
 border(::Val{E}, t::Tile) = t.grid[:,end]
 border(::Val{S}, t::Tile) = t.grid[end,:]
 border(::Val{W}, t::Tile) = t.grid[:,1]
-borders(t::Tile) = @views [border(Val(d), t) for d in [N, E, S, W]]
+# borders(t::Tile) = @views [border(Val(d), t) for d in [N, E, S, W]]
+# N E S W
+borders(t::Tile) = @views (t.grid[1,:], t.grid[:,end], t.grid[end,:], t.grid[:,1])
+
 
 "do these tiles overlap? (updates the 'overlaps' field with the overlapping direction)"
 function overlaps!(t1::Tile, t2::Tile)
